@@ -26,8 +26,7 @@ class _MyAppState extends State<MyApp> {
                   TextButton(
                     child: Text('Start service'),
                     onPressed: () async {
-                      await FlutterForegroundServicePlugin
-                          .startForegroundService(
+                      await FlutterForegroundServicePlugin.startForegroundService(
                         notificationContent: NotificationContent(
                           iconName: 'ic_launcher',
                           titleText: 'Title Text',
@@ -46,21 +45,20 @@ class _MyAppState extends State<MyApp> {
                   TextButton(
                     child: Text('Stop service'),
                     onPressed: () async {
-                      await FlutterForegroundServicePlugin
-                          .stopForegroundService();
+                      await FlutterForegroundServicePlugin.stopForegroundService();
                     },
                   ),
                   TextButton(
                     child: Text('Is service running'),
                     onPressed: () async {
-                      var isRunning = await FlutterForegroundServicePlugin
-                          .isForegroundServiceRunning();
+                      var isRunning =
+                          await FlutterForegroundServicePlugin.isForegroundServiceRunning();
                       print(isRunning);
                       var snackbar = SnackBar(
                         content: Text('$isRunning'),
                         duration: Duration(milliseconds: 500),
                       );
-                      Scaffold.of(context).showSnackBar(snackbar);
+                      ScaffoldMessenger.of(context).showSnackBar(snackbar);
                     },
                   ),
                   TextButton(

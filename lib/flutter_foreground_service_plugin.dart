@@ -22,10 +22,8 @@ class FlutterForegroundServicePlugin {
   static const String _backgroundChannelName =
       'com.saywut.flutter_foreground_service_plugin/background_channel';
 
-  static const MethodChannel _foreground_channel =
-      MethodChannel(_foregroundChannelName);
-  static const MethodChannel _background_channel =
-      MethodChannel(_backgroundChannelName);
+  static const MethodChannel _foreground_channel = MethodChannel(_foregroundChannelName);
+  static const MethodChannel _background_channel = MethodChannel(_backgroundChannelName);
 
   // foreground channel commands
   static const String _startService = "startForegroundService";
@@ -37,8 +35,7 @@ class FlutterForegroundServicePlugin {
   static const String _stopPeriodicTask = "stopPeriodicTask";
 
   // background channel commands
-  static const String _backgroundChannelInitialize =
-      "backgroundChannelInitialize";
+  static const String _backgroundChannelInitialize = "backgroundChannelInitialize";
 
   /// Starts the foreground service with the passed [notificationContent] and [notificationChannelContent].
   ///
@@ -52,26 +49,20 @@ class FlutterForegroundServicePlugin {
   /// change a channel's name and description.`
   /// [Click here for further reading about the android notification channels](https://developer.android.com/training/notify-user/channels)
   static Future<void> startForegroundService({
-    @required NotificationContent notificationContent,
-    @required NotificationChannelContent notificationChannelContent,
+    required NotificationContent notificationContent,
+    required NotificationChannelContent notificationChannelContent,
     bool isStartOnBoot = false,
   }) async {
-    assert(notificationContent != null);
-    assert(notificationChannelContent != null);
-    assert(isStartOnBoot != null);
-
-    int notifColorValue = notificationContent.color != null
-        ? notificationContent.color.red << 16 |
-            notificationContent.color.green << 8 |
-            notificationContent.color.blue
-        : null;
+    int? notifColorValue = notificationContent.color!.red << 16 |
+        notificationContent.color!.green << 8 |
+        notificationContent.color!.blue;
 
     Map<String, dynamic> args = {
       'notifTitleText': notificationContent.titleText,
       'notifBodyText': notificationContent.bodyText,
       'notifSubText': notificationContent.subText,
       'notifIconName': notificationContent.iconName,
-      'notifColor': notifColorValue ?? -1,
+      'notifColor': notifColorValue,
       'notifEnableSound': notificationContent.enableSound,
       'notifEnableVibration': notificationContent.enableVibration,
       'notifPriority': notificationContent.priority.priority,
@@ -79,8 +70,7 @@ class FlutterForegroundServicePlugin {
       'channelNameText': notificationChannelContent.nameText,
       'channelDescriptionText': notificationChannelContent.descriptionText,
       'channelImportance': notificationChannelContent.importance.importance,
-      'channelLockscreenVisibility':
-          notificationChannelContent.lockscreenVisibility.visibility,
+      'channelLockscreenVisibility': notificationChannelContent.lockscreenVisibility.visibility,
       'isStartOnBoot': isStartOnBoot,
     };
 
@@ -94,28 +84,24 @@ class FlutterForegroundServicePlugin {
   }
 
   static Future<void> refreshForegroundServiceContent({
-    @required NotificationContent notificationContent,
+    required NotificationContent notificationContent,
   }) async {
-    assert(notificationContent != null);
 
-    int notifColorValue = notificationContent.color != null
-        ? notificationContent.color.red << 16 |
-            notificationContent.color.green << 8 |
-            notificationContent.color.blue
-        : null;
+    int? notifColorValue = notificationContent.color!.red << 16 |
+        notificationContent.color!.green << 8 |
+        notificationContent.color!.blue;
 
     Map<String, dynamic> args = {
       'notifTitleText': notificationContent.titleText,
       'notifBodyText': notificationContent.bodyText,
       'notifSubText': notificationContent.subText,
       'notifIconName': notificationContent.iconName,
-      'notifColor': notifColorValue ?? -1,
+      'notifColor': notifColorValue,
       'notifEnableSound': notificationContent.enableSound,
       'notifEnableVibration': notificationContent.enableVibration,
     };
 
-    await _foreground_channel.invokeMethod(
-        _refreshForegroundServiceNotificationContent, args);
+    await _foreground_channel.invokeMethod(_refreshForegroundServiceNotificationContent, args);
   }
 
   /// Checks wether the service is running or not
@@ -150,16 +136,10 @@ class FlutterForegroundServicePlugin {
   static Future<void> startPeriodicTask({
     Duration delay = const Duration(milliseconds: 0),
     Duration period = const Duration(milliseconds: 1),
-    @required void Function() periodicTaskFun,
+    required void Function() periodicTaskFun,
   }) async {
-    assert(delay != null);
-    assert(period != null);
-    assert(delay.inMilliseconds >= 0);
-    assert(period.inMilliseconds > 0);
-    assert(periodicTaskFun != null);
 
-    var rawTaskHandler =
-        PluginUtilities.getCallbackHandle(periodicTaskFun).toRawHandle();
+    var rawTaskHandler = PluginUtilities.getCallbackHandle(periodicTaskFun)!.toRawHandle();
 
     Map<String, dynamic> args = {
       'taskDelay': delay.inMilliseconds,
